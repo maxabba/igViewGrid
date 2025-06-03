@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Grid Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fafafa;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #262626;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .instructions {
+            text-align: center;
+            color: #8e8e8e;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .grid-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #dbdbdb;
+        }
+
+        .grid-item {
+            position: relative;
+            background-color: #e1e1e1;
+            overflow: hidden;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            border: 1px solid #dbdbdb;
+            margin: -1px 0 0 -1px;
+        }
+
+        .grid-item:hover {
+            opacity: 0.9;
+        }
+
+        /* Aspect ratio per i post standard */
+        .grid-item {
+            aspect-ratio: 1080 / 1440;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .grid-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            z-index: 2;
+            transition: all 0.2s ease;
+        }
+
+        .delete-button:hover {
+            background-color: rgba(220, 38, 38, 1);
+            transform: scale(1.1);
+        }
+
+        .grid-item.has-image .delete-button {
+            display: flex;
+        }
+
+        .empty-slot {
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #a0a0a0;
+        }
+
+        .empty-slot-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .empty-slot-text {
+            font-size: 12px;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .hidden-input {
+            display: none;
+        }
+
+        .clear-button {
+            display: none;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .clear-button:hover {
+            background-color: #dc2626;
+        }
+
+        .clear-button.show {
+            display: block;
+        }
+
+        .order-info {
+            text-align: center;
+            color: #8e8e8e;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Instagram Grid Viewer</h1>
+        <p class="instructions">
+            Clicca su un riquadro per caricare un'immagine<br>
+            Le immagini seguono l'ordine Instagram: dal basso-sinistra verso l'alto-destra
+        </p>
+
+        <div class="grid-container">
+            <div class="instagram-grid" id="instagramGrid">
+                <!-- Row 1 (top) -->
+                <div class="grid-item empty-slot" data-position="9">
+                    <span class="grid-number">9</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+                <div class="grid-item empty-slot" data-position="8">
+                    <span class="grid-number">8</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+                <div class="grid-item empty-slot" data-position="7">
+                    <span class="grid-number">7</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+                <!-- Row 2 (middle) -->
+                <div class="grid-item empty-slot" data-position="6">
+                    <span class="grid-number">6</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+                <div class="grid-item empty-slot" data-position="5">
+                    <span class="grid-number">5</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+                <div class="grid-item empty-slot" data-position="4">
+                    <span class="grid-number">4</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+                <!-- Row 3 (bottom) -->
+                <div class="grid-item empty-slot" data-position="3">
+                    <span class="grid-number">3</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+                <div class="grid-item empty-slot" data-position="2">
+                    <span class="grid-number">2</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+                <div class="grid-item empty-slot" data-position="1">
+                    <span class="grid-number">1</span>
+                    <span class="empty-slot-icon">📷</span>
+                    <span class="empty-slot-text">Clicca per aggiungere</span>
+                    <button class="delete-button">×</button>
+                    <input type="file" class="hidden-input" accept="image/*">
+                </div>
+            </div>
+        </div>
+
+        <button class="clear-button" id="clearButton">Svuota Griglia</button>
+
+        <p class="order-info">
+            Ordine di inserimento: 1 (basso-sinistra) → 2 (basso-centro) → 3 (basso-destra) → 4 (centro-sinistra) → ... → 9 (alto-destra)
+        </p>
+    </div>
+
+    <script>
+        const clearButton = document.getElementById('clearButton');
+        const gridItems = document.querySelectorAll('.grid-item');
+        
+        let uploadedImages = {};
+
+        // Setup event listeners for each grid item
+        gridItems.forEach(item => {
+            const fileInput = item.querySelector('.hidden-input');
+            const deleteButton = item.querySelector('.delete-button');
+            const position = item.dataset.position;
+
+            // Click on grid item (but not on delete button)
+            item.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('delete-button') && 
+                    !item.classList.contains('has-image')) {
+                    fileInput.click();
+                }
+            });
+
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        uploadedImages[position] = e.target.result;
+                        updateGridItem(item, e.target.result);
+                        updateClearButton();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Delete button click
+            deleteButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                delete uploadedImages[position];
+                clearGridItem(item);
+                updateClearButton();
+                fileInput.value = '';
+            });
+        });
+
+        function updateGridItem(item, imageUrl) {
+            const position = item.dataset.position;
+            item.innerHTML = `
+                <img src="${imageUrl}" alt="Instagram post ${position}">
+                <span class="grid-number">${position}</span>
+                <button class="delete-button">×</button>
+                <input type="file" class="hidden-input" accept="image/*">
+            `;
+            item.classList.remove('empty-slot');
+            item.classList.add('has-image');
+            
+            // Re-setup event listeners
+            setupItemListeners(item);
+        }
+
+        function clearGridItem(item) {
+            const position = item.dataset.position;
+            item.innerHTML = `
+                <span class="grid-number">${position}</span>
+                <span class="empty-slot-icon">📷</span>
+                <span class="empty-slot-text">Clicca per aggiungere</span>
+                <button class="delete-button">×</button>
+                <input type="file" class="hidden-input" accept="image/*">
+            `;
+            item.classList.add('empty-slot');
+            item.classList.remove('has-image');
+            
+            // Re-setup event listeners
+            setupItemListeners(item);
+        }
+
+        function setupItemListeners(item) {
+            const fileInput = item.querySelector('.hidden-input');
+            const deleteButton = item.querySelector('.delete-button');
+            const position = item.dataset.position;
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        uploadedImages[position] = e.target.result;
+                        updateGridItem(item, e.target.result);
+                        updateClearButton();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            deleteButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                delete uploadedImages[position];
+                clearGridItem(item);
+                updateClearButton();
+            });
+        }
+
+        function updateClearButton() {
+            if (Object.keys(uploadedImages).length > 0) {
+                clearButton.classList.add('show');
+            } else {
+                clearButton.classList.remove('show');
+            }
+        }
+
+        // Clear all button
+        clearButton.addEventListener('click', () => {
+            uploadedImages = {};
+            gridItems.forEach(item => {
+                clearGridItem(item);
+            });
+            updateClearButton();
+        });
+    </script>
+</body>
+</html>
