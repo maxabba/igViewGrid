@@ -12,9 +12,9 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #fafafa;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            padding: 40px 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -25,6 +25,10 @@
             max-width: 1000px;
             width: 100%;
             margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         h1 {
@@ -42,10 +46,7 @@
         }
 
         .grid-container {
-            background-color: #fff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .instagram-grid {
@@ -62,13 +63,16 @@
             background-color: #e1e1e1;
             overflow: hidden;
             cursor: pointer;
-            transition: opacity 0.2s ease;
+            transition: transform 0.2s ease, opacity 0.2s ease;
             border: 1px solid #dbdbdb;
             margin: -1px 0 0 -1px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .grid-item:hover {
             opacity: 0.9;
+            transform: scale(1.02);
         }
 
         /* Aspect ratio per i post standard */
@@ -153,17 +157,18 @@
             display: none;
             margin: 20px auto;
             padding: 10px 20px;
-            background-color: #ef4444;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 30px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
         }
 
         .clear-button:hover {
-            background-color: #dc2626;
+            transform: scale(1.05);
         }
 
         .clear-button.show {
